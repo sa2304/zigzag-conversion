@@ -7,34 +7,32 @@ using namespace std;
 class Solution {
  public:
   string convert(string s, int numRows) {
-    // FIXME
-    return s;
-  }
-
-  string readTeeth(string_view s, int numRows) {
     string result;
-    if (0 < numRows) {
-      int left = 0;
-      int right = numRows * 2 - 2;
-      while (left < right) {
-        result.push_back(s[left++]);
-        result.push_back(s[right--]);
+    const int zl = zigzagLength(numRows);
+    const int step = zl ? zl : 1;
+    for (int row = 0; row < numRows; ++row) {
+      int i = row;
+      while (i < s.length()) {
+        result.push_back(s[i]);
+        if (row != 0 and row != numRows - 1) {
+          int d = i + diagElement(row, numRows);
+          if (d < s.length()) { result.push_back(s[d]); }
+        }
+        i += step;
       }
-      result.push_back(s[left]);
     }
 
     return result;
   }
-};
 
-void TestReadTeeth() {
-  Solution s;
-  assert("0A192837465"s == s.readTeeth("0123456789A"s, 6));
-  assert("0615243"s == s.readTeeth("0123456789A"s, 4));
-  assert("04132"s == s.readTeeth("0123456789A"s, 3));
-  assert("021"s == s.readTeeth("0123456789A"s, 2));
-  assert("0"s == s.readTeeth("0123456789A"s, 1));
-}
+  int diagElement(int row, int numRows) {
+    return zigzagLength(numRows) - row * 2;
+  }
+
+  int zigzagLength(int numRows) {
+    return numRows * 2 - 2;
+  }
+};
 
 void TestConvert() {
   Solution s;
@@ -44,7 +42,6 @@ void TestConvert() {
 }
 
 int main() {
-  TestReadTeeth();
   TestConvert();
   std::cout << "Ok!" << std::endl;
   return 0;
