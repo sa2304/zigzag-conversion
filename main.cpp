@@ -8,6 +8,7 @@ class Solution {
  public:
   string convert(string s, int numRows) {
     string result;
+    result.reserve(s.length());
     const int zl = zigzagLength(numRows);
     const int step = zl ? zl : 1;
     for (int row = 0; row < numRows; ++row) {
